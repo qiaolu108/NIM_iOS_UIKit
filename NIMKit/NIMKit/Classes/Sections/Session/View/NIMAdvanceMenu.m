@@ -84,7 +84,7 @@ static const NSInteger kNIMEmoticonsCountInPage = 7;
 {
     [self genMediaButtonsWithMessage:message];
     [self.pageView reloadData];
-    self.hidden = (_mediaButtons.count == 0);
+    self.hidden = NO;
     [self setNeedsLayout];
 }
 
@@ -274,6 +274,11 @@ static const NSInteger kNIMEmoticonsCountInPage = 7;
         [button setFrame:iconRect];
         [subView addSubview:button];
         indexInPage ++;
+    }
+    if (coloumnIndex == layout.columes -1)
+    {
+        rowIndex = rowIndex +1;
+        coloumnIndex = -1; //设置成-1是因为显示在第0位，有加1
     }
     return subView;
 }

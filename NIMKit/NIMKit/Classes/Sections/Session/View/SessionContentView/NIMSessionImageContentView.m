@@ -56,15 +56,15 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    UIEdgeInsets contentInsets = self.model.contentViewInsets;
-    CGFloat tableViewWidth = self.superview.nim_width;
-    CGSize contentSize = [self.model contentSize:tableViewWidth];
-    CGRect imageViewFrame = CGRectMake(contentInsets.left, contentInsets.top, contentSize.width, contentSize.height);
-    self.imageView.frame  = imageViewFrame;
+//    UIEdgeInsets contentInsets = self.model.contentViewInsets;
+//    CGFloat tableViewWidth = self.superview.nim_width;
+//    CGSize contentSize = [self.model contentSize:tableViewWidth];
+//    CGRect imageViewFrame = CGRectMake(0, 0, contentSize.width, contentSize.height);
+    self.imageView.frame  = self.bounds;
     _progressView.frame   = self.bounds;
     
     CALayer *maskLayer = [CALayer layer];
-    maskLayer.cornerRadius = 13.0;
+    maskLayer.cornerRadius = 4;
     maskLayer.backgroundColor = [UIColor blackColor].CGColor;
     maskLayer.frame = self.imageView.bounds;
     self.imageView.layer.mask = maskLayer;

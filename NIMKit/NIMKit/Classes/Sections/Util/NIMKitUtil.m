@@ -10,9 +10,6 @@
 #import "NIMKit.h"
 #import "NIMKitInfoFetchOption.h"
 #import "NIMInputEmoticonManager.h"
-#import "NSDictionary+NIMKit.h"
-
-static NSDateComponentsFormatter *_dateComponentsFormatter;
 
 @implementation NIMKitUtil
 
@@ -138,13 +135,11 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
     if (text == nil) {
         switch (message.messageType) {
             case NIMMessageTypeNotification:
-                text = [NIMKitUtil notificationMessage:message];
+                text =  [NIMKitUtil notificationMessage:message];
                 break;
             case NIMMessageTypeTip:
                 text = message.text;
                 break;
-            case NIMMessageTypeRtcCallRecord:
-                text = [self rtcCallRecordFormatedMessage:message];
             default:
                 break;
         }
@@ -152,25 +147,6 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
     return text;
 }
 
-+ (NSString *)durationTextWithSeconds:(NSTimeInterval)seconds
-{
-    NSString *text = [[self dateComponentsFormatter] stringFromTimeInterval:seconds];
-    return text;
-}
-
-+ (NSDateComponentsFormatter *)dateComponentsFormatter {
-    if (!_dateComponentsFormatter) {
-        @synchronized (self) {
-            if (!_dateComponentsFormatter) {
-                _dateComponentsFormatter = [[NSDateComponentsFormatter alloc] init];
-                _dateComponentsFormatter.unitsStyle = NSDateComponentsFormatterUnitsStylePositional;
-                _dateComponentsFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
-                _dateComponentsFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
-            }
-        }
-    }
-    return _dateComponentsFormatter;
-}
 
 + (NSString *)notificationMessage:(NIMMessage *)message{
     NIMNotificationObject *object = message.messageObject;
@@ -206,11 +182,12 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
         
         switch (content.operationType) {
             case NIMTeamOperationTypeInvite:{
-                NSString *str = [NSString stringWithFormat:@"%@邀请%@".nim_localized,source,targets.firstObject];
+//                NSString *str = [NSString stringWithFormat:@"%@邀请%@".nim_localized,source,targets.firstObject];
+                NSString *str = [NSString stringWithFormat: @"%@", targets.firstObject];
                 if (targets.count>1) {
-                    str = [str stringByAppendingFormat:@"%zd人".nim_localized,targets.count];
+                    str = [str stringByAppendingFormat:@"等%zd人".nim_localized,targets.count];
                 }
-                str = [str stringByAppendingFormat:@"进入了%@".nim_localized,teamName];
+                str = [str stringByAppendingFormat:@"已加入群聊".nim_localized,teamName];
                 formatedMessage = str;
             }
                 break;
@@ -218,11 +195,12 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
                 formatedMessage = [NSString stringWithFormat:@"%@解散了%@".nim_localized,source,teamName];
                 break;
             case NIMTeamOperationTypeKick:{
-                NSString *str = [NSString stringWithFormat:@"%@将%@".nim_localized,source,targets.firstObject];
+//                NSString *str = [NSString stringWithFormat:@"%@将%@".nim_localized,source,targets.firstObject];
+                NSString *str = [NSString stringWithFormat:@"%@".nim_localized,targets.firstObject];
                 if (targets.count>1) {
-                    str = [str stringByAppendingFormat:@"%zd人".nim_localized,targets.count];
+                    str = [str stringByAppendingFormat:@"等%zd人".nim_localized,targets.count];
                 }
-                str = [str stringByAppendingFormat:@"移出了%@".nim_localized,teamName];
+                str = [str stringByAppendingFormat:@"暂时退出群聊".nim_localized,teamName];
                 formatedMessage = str;
             }
                 break;
@@ -237,7 +215,7 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
                         NIMTeamUpdateTag tag = [[[teamAttachment.values allKeys] firstObject] integerValue];
                         switch (tag) {
                             case NIMTeamUpdateTagName:
-                                formatedMessage = [NSString stringWithFormat:@"%@更新了%@名称".nim_localized,source,teamName];
+                                formatedMessage = [NSString stringWithFormat:@"群名称被更新".nim_localized,teamName];
                                 break;
                             case NIMTeamUpdateTagIntro:
                                 formatedMessage = [NSString stringWithFormat:@"%@更新了%@介绍".nim_localized,source,teamName];
@@ -249,7 +227,8 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
                                 formatedMessage = [NSString stringWithFormat:@"%@更新了%@验证方式".nim_localized,source,teamName];
                                 break;
                             case NIMTeamUpdateTagAvatar:
-                                formatedMessage = [NSString stringWithFormat:@"%@更新了%@头像".nim_localized,source,teamName];
+//                                formatedMessage = [NSString stringWithFormat:@"%@更新了%@头像".nim_localized,source,teamName];
+                                formatedMessage = [NSString stringWithFormat:@"群成员已更新".nim_localized,source,teamName];
                                 break;
                             case NIMTeamUpdateTagInviteMode:
                                 formatedMessage = [NSString stringWithFormat:@"%@更新了邀请他人权限".nim_localized,source];
@@ -448,29 +427,6 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
     return formatedMessage;
 }
 
-+ (NSString *)rtcCallRecordFormatedMessage:(NIMMessage *)message {
-    NIMRtcCallRecordObject *record = message.messageObject;
-    switch (record.callStatus) {
-        case NIMRtcCallStatusCanceled:
-            return @"已取消".nim_localized;
-        case NIMRtcCallStatusTimeout:
-            return @"未接听".nim_localized;
-        case NIMRtcCallStatusRejected:
-            return @"已拒绝".nim_localized;
-        case NIMRtcCallStatusBusy:
-            if ([message.from isEqualToString:NIMSDK.sharedSDK.loginManager.currentAccount]) {
-                return @"已拒绝".nim_localized;
-            }
-            return @"对方正忙".nim_localized;
-        case NIMRtcCallStatusComplete: {
-            NSTimeInterval duration = [record.durations nimkit_jsonInteger:NIMSDK.sharedSDK.loginManager.currentAccount?:@""];
-            return [NSString stringWithFormat:@"通话时长 %@",[NIMKitUtil durationTextWithSeconds:duration]];
-        }
-        default:
-            return @"未知".nim_localized;
-    }
-}
-
 + (NSString *)netcallNotificationFormatedMessage:(NIMMessage *)message{
     NIMNotificationObject *object = message.messageObject;
     NIMNetCallNotificationContent *content = (NIMNetCallNotificationContent *)object.content;
@@ -607,8 +563,6 @@ static NSDateComponentsFormatter *_dateComponentsFormatter;
         case NIMChatroomEventTypeQueueChange:
         case NIMChatroomEventTypeQueueBatchChange:
             return [NSString stringWithFormat:@"%@改变了聊天室队列".nim_localized,opeText];
-        case NIMChatroomEventTypeRecall:
-            return [NSString stringWithFormat:@"撤回消息%@", [content revokedMessageId]];
         default:
             break;
     }

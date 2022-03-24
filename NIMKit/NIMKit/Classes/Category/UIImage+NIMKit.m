@@ -96,18 +96,12 @@
 + (UIImage *)nim_emoticonInKit:(NSString *)imageName {
     NSBundle *bundle = [NIMKit sharedKit].emoticonBundle;
     NSString *name = [NIMKit_EmojiPath stringByAppendingPathComponent:imageName];
-    @try {
-        UIImage *image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
-        if (!image) {
-            image = [UIImage imageNamed:imageName];
-        }
-        NSAssert(image != nil, @"nim_emoticonInKit return nil!");
-        return image;
+    UIImage *image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+    if (!image) {
+        image = [UIImage imageNamed:imageName];
     }
-    @catch (NSException *exception) {
-        NSAssert(NO, exception.reason);
-        return nil;
-    }
+    NSAssert(image != nil, @"nim_emoticonInKit return nil!");
+    return image;
 }
 
 - (UIImage *)nim_imageForAvatarUpload

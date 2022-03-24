@@ -213,11 +213,11 @@
 }
 
 - (void)preloadEmoticonResource {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    dispatch_after(DISPATCH_TIME_NOW + 0.5, dispatch_get_global_queue(0, 0), ^{
         for (NIMInputEmoticonCatalog *catalog in _catalogs) {
             [catalog.emoticons enumerateObjectsUsingBlock:^(NIMInputEmoticon  *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (obj.filename) {
-                   __unused UIImage *image = [UIImage nim_emoticonInKit:obj.filename];
+                    __unused UIImage *image = [UIImage nim_emoticonInKit:obj.filename];
                 }
             }];
         }

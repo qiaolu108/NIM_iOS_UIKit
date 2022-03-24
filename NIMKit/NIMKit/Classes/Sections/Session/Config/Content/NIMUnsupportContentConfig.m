@@ -23,7 +23,7 @@
     if (self)
     {
         _label = [[UILabel alloc] initWithFrame:CGRectZero];
-        _label.text = @"未知类型消息".nim_localized;
+        _label.text = @"请在电脑端查看".nim_localized;
     }
     return self;
 }

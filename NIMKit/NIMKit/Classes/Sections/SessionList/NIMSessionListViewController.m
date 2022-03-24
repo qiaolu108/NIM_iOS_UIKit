@@ -163,7 +163,8 @@
               totalUnreadCount:(NSInteger)totalUnreadCount
 {
     //清理本地数据
-    [self.recentSessions removeObject:recentSession];
+    NSUInteger index = [self.recentSessions indexOfObject:recentSession];
+    [self.recentSessions removeObjectAtIndex:index];
     
     //如果删除本地会话后就不允许漫游当前会话，则需要进行一次删除服务器会话的操作
     if (self.autoRemoveRemoteSession)
@@ -239,12 +240,7 @@
 }
 
 - (NSString *)timestampDescriptionForRecentSession:(NIMRecentSession *)recent{
-    if (recent.lastMessage) {
-        return [NIMKitUtil showTime:recent.lastMessage.timestamp showDetail:NO];
-    }
-    // 服务端时间戳以毫秒为单位,需要转化
-    NSTimeInterval timeSecond = recent.updateTime / 1000.0;
-    return [NIMKitUtil showTime:timeSecond showDetail:NO];
+    return [NIMKitUtil showTime:recent.lastMessage.timestamp showDetail:NO];
 }
 
 #pragma mark - Misc

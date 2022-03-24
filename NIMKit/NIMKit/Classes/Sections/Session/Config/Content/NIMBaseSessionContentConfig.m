@@ -17,7 +17,6 @@
 #import "NIMUnsupportContentConfig.h"
 #import "NIMTipContentConfig.h"
 #import "NIMReplyedTextContentConfig.h"
-#import "NIMRtcCallRecordContentConfig.h"
 
 @interface NIMSessionContentConfigFactory ()
 @property (nonatomic,strong)    NSDictionary                *dict;
@@ -48,24 +47,21 @@
                   @(NIMMessageTypeFile)         :       [NIMFileContentConfig new],
                   @(NIMMessageTypeLocation)     :       [NIMLocationContentConfig new],
                   @(NIMMessageTypeNotification) :       [NIMNotificationContentConfig new],
-                  @(NIMMessageTypeTip)          :       [NIMTipContentConfig new],
-                  @(NIMMessageTypeRtcCallRecord):       [NIMRtcCallRecordContentConfig new],
-        };
+                  @(NIMMessageTypeTip)          :       [NIMTipContentConfig new]};
         
         NIMReplyedTextContentConfig *replyedTextConfig = [NIMReplyedTextContentConfig new];
         _replyDict = @{
-            @(NIMMessageTypeText)       : replyedTextConfig,
-            @(NIMMessageTypeAudio)      : replyedTextConfig,
-            @(NIMMessageTypeVideo)      : replyedTextConfig,
-            @(NIMMessageTypeFile)       : replyedTextConfig,
-            @(NIMMessageTypeTip)        : replyedTextConfig,
-            @(NIMMessageTypeRobot)      : replyedTextConfig,
-            @(NIMMessageTypeNotification)   : replyedTextConfig,
-            @(NIMMessageTypeLocation)   : replyedTextConfig,
-            @(NIMMessageTypeCustom)     : replyedTextConfig,
-            @(NIMMessageTypeImage)      : replyedTextConfig,
-            @(NIMMessageTypeRtcCallRecord)      : replyedTextConfig,
-        };
+                        @(NIMMessageTypeText)       : replyedTextConfig,
+                        @(NIMMessageTypeAudio)      : replyedTextConfig,
+                        @(NIMMessageTypeVideo)      : replyedTextConfig,
+                        @(NIMMessageTypeFile)       : replyedTextConfig,
+                        @(NIMMessageTypeTip)        : replyedTextConfig,
+                        @(NIMMessageTypeRobot)      : replyedTextConfig,
+                        @(NIMMessageTypeNotification)   : replyedTextConfig,
+                        @(NIMMessageTypeLocation)   : replyedTextConfig,
+                        @(NIMMessageTypeCustom)     : replyedTextConfig,
+                        @(NIMMessageTypeImage)      : replyedTextConfig,
+                        };
         _unsupportConfig = [[NIMUnsupportContentConfig alloc] init];
     }
     return self;

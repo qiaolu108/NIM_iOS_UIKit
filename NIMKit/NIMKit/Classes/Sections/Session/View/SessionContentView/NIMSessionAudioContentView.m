@@ -50,7 +50,7 @@
 
 - (void)addVoiceView{
     _audioBackgroundView = [[UIView alloc] initWithFrame:CGRectZero];
-    _audioBackgroundView.layer.cornerRadius = 16.f;
+    _audioBackgroundView.layer.cornerRadius = 4.f;
     _audioBackgroundView.userInteractionEnabled = NO;
     [self addSubview:_audioBackgroundView];
     
@@ -76,7 +76,7 @@
 - (void)refresh:(NIMMessageModel *)data {
     [super refresh:data];
     NIMAudioObject *object = self.model.message.messageObject;
-    self.durationLabel.text = [NSString stringWithFormat:@"%zd\"",(NSInteger)((object.duration+500)/1000)];//四舍五入
+    self.durationLabel.text = [NSString stringWithFormat:@"%zd\"",(object.duration+500)/1000];//四舍五入
     
     NIMKitSetting *setting = [[NIMKit sharedKit].config setting:data.message];
 
@@ -86,8 +86,8 @@
     [self.durationLabel sizeToFit];
     
     [self setPlaying:self.isPlaying];
-    
-    [self refreshBackground:data];
+    _audioBackgroundView.backgroundColor = [UIColor clearColor];
+//    [self refreshBackground:data];
 }
 
 - (void)refreshBackground:(NIMMessageModel *)data
@@ -95,11 +95,11 @@
     UIColor *color = nil;
     if (data.shouldShowLeft)
     {
-        color = [UIColor colorWithHex:0xF3F3F3 alpha:1];
+        color = [UIColor colorWithHex:0xEDF0F4 alpha:1];
     }
     else
     {
-        color = [UIColor colorWithHex:0x1A73E0 alpha:1];
+        color = [UIColor colorWithHex:0x1D8CFF alpha:1];
     }
     
     _audioBackgroundView.backgroundColor = color;

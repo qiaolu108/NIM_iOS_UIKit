@@ -348,7 +348,7 @@
     _replyedBubbleView.nim_size = size;
     
     UIEdgeInsets contentInsets = self.model.replyBubbleViewInsets;
-    CGFloat left = 0;
+    CGFloat left = contentInsets.left;
     CGFloat protraitRightToBubble = 5.f;
     if (!self.model.shouldShowLeft)
     {
@@ -375,7 +375,7 @@
     _bubbleView.nim_size = size;
     
     UIEdgeInsets contentInsets = self.model.bubbleViewInsets;
-    CGFloat left = 0;
+    CGFloat left = contentInsets.left;
     CGFloat protraitRightToBubble = 5.f;
     if (!self.model.shouldShowLeft)
     {
@@ -510,10 +510,6 @@
     }
 }
 
-- (void)disableLongPress:(BOOL)disable {
-    _longPressGesture.enabled = !disable;
-}
-
 #pragma mark - Action
 - (void)onRetryMessage:(id)sender
 {
@@ -574,7 +570,7 @@
     CGFloat cellWidth = self.bounds.size.width;
     CGFloat protraitImageWidth = [self avatarSize].width;
     CGFloat protraitImageHeight = [self avatarSize].height;
-    CGFloat selfProtraitOriginX = 0;
+    CGFloat selfProtraitOriginX = self.cellPaddingToAvatar.x;
     
     if (self.model.shouldShowLeft) {
         if (![self needShowSelectButton]) {

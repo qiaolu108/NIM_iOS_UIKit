@@ -25,6 +25,8 @@
 
 @property(nonatomic,strong) CLGeocoder * geoCoder;
 
+@property(nonatomic) BOOL needReLocation;
+
 @end
 
 @implementation NIMLocationViewController
@@ -76,6 +78,7 @@
                             position:CSToastPositionCenter];
             }else{
                 self.mapView.showsUserLocation = YES;
+                self.needReLocation = YES;
             }
         }else{
             [self.view makeToast:@"请打开地理位置服务".nim_localized
@@ -151,12 +154,16 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
-    _updateUserLocation = YES;
-    MKCoordinateRegion theRegion;
-    theRegion.center = userLocation.coordinate;
-    theRegion.span.longitudeDelta	= 0.01f;
-    theRegion.span.latitudeDelta	= 0.01f;
-    [_mapView setRegion:theRegion animated:NO];
+    // 只在开始的定位一次。规避滑动后重新的定位的问题
+    if (_needReLocation) {
+        _needReLocation = FALSE;
+        _updateUserLocation = YES;
+        MKCoordinateRegion theRegion;
+        theRegion.center = userLocation.coordinate;
+        theRegion.span.longitudeDelta    = 0.01f;
+        theRegion.span.latitudeDelta    = 0.01f;
+        [_mapView setRegion:theRegion animated:NO];
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views{

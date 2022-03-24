@@ -395,7 +395,7 @@
                         {
                             weakSelf.toolBar.showsKeyboard = NO;
                         }
-                        [weakSelf sizeToFit];
+                        [self sizeToFit];
                     });
                 }
                 else {
@@ -498,13 +498,11 @@
     BOOL endEditing = [super endEditing:force];
     if (!self.toolBar.showsKeyboard) {
         UIViewAnimationCurve curve = UIViewAnimationCurveEaseInOut;
-        
-        __weak typeof(self) weakSelf = self;
         void(^animations)(void) = ^{
-            [weakSelf refreshStatus:NIMInputStatusText];
-            [weakSelf sizeToFit];
-            if (weakSelf.inputDelegate && [weakSelf.inputDelegate respondsToSelector:@selector(didChangeInputHeight:)]) {
-                [weakSelf.inputDelegate didChangeInputHeight:weakSelf.nim_height];
+            [self refreshStatus:NIMInputStatusText];
+            [self sizeToFit];
+            if (self.inputDelegate && [self.inputDelegate respondsToSelector:@selector(didChangeInputHeight:)]) {
+                [self.inputDelegate didChangeInputHeight:self.nim_height];
             }
         };
         NSTimeInterval duration = 0.25;
@@ -668,7 +666,8 @@
 
 - (void)didPressSend:(id)sender{
     if ([self.actionDelegate respondsToSelector:@selector(onSendText:atUsers:)] && [self.toolBar.contentText length] > 0) {
-        NSString *sendText = self.toolBar.contentText;
+        NSString *newStr = [self.toolBar.contentText stringByReplacingOccurrencesOfString:@"\r" withString:@"\n"];
+        NSString *sendText = newStr;
         [self.actionDelegate onSendText:sendText atUsers:[self.atCache allAtUid:sendText]];
         [self.atCache clean];
         self.toolBar.contentText = @"";
@@ -749,7 +748,7 @@
         return NSMakeRange(0, 0) ;
     }
     
-    NSRange range;
+    NSRange range = NSMakeRange(0, 0);
     NSRange subRange = [self rangeForPrefix:@"[" suffix:@"]"];
     
     if (text.length > 0 &&

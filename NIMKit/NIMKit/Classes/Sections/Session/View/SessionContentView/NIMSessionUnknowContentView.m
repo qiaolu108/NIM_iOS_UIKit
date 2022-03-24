@@ -13,6 +13,7 @@
 #import "NIMKit.h"
 #import "NSString+NIMKit.h"
 #import "NIMGlobalMacro.h"
+#import "UIColor+NIMKit.h"
 
 
 @interface NIMSessionUnknowContentView()
@@ -36,7 +37,7 @@
 
 - (void)refresh:(NIMMessageModel *)data{
     [super refresh:data];
-    NSString *text = @"未知类型消息".nim_localized;
+    NSString *text = @"请在电脑端查看".nim_localized;
     
     NIMKitSetting *setting = [[NIMKit sharedKit].config setting:data.message];
 
@@ -44,6 +45,8 @@
     self.label.font = setting.font;
     [self.label setText:text];
     [self.label sizeToFit];
+
+    [self setBackgroundColor: [UIColor colorWithHex:0xEDF0F4 alpha:1]];
 }
 
 

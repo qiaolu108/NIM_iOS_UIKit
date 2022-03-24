@@ -9,8 +9,6 @@
 #import "NIMMessageUtil.h"
 #import <NIMSDK/NIMSDK.h>
 #import "NIMGlobalMacro.h"
-#import "NIMKitUtil.h"
-#import "NSDictionary+NIMKit.h"
 
 @implementation NIMMessageUtil
 
@@ -41,10 +39,9 @@
         case NIMMessageTypeTip:
             text = message.text;
             break;
-        case NIMMessageTypeRtcCallRecord: {
-            NIMRtcCallRecordObject *record = message.messageObject;
-            return (record.callType == NIMRtcCallTypeAudio ? @"[网络通话]" : @"[视频聊天]").nim_localized;
-        }
+        case NIMMessageTypeCustom:
+            text = @"[自定义消息]".nim_localized;
+            break;
         default:
             text = @"[未知消息]".nim_localized;
     }

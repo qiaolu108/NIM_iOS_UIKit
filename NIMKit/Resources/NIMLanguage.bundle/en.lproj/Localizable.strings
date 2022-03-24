@@ -14,7 +14,7 @@
 "发来了一张图片" = "Sent a picture";
 "发来了一条位置信息" = "Sent a message of location";
 "已读" = "Have read";
-"未知类型消息" = "Unknown message type";
+"请在电脑端查看" = "Unknown message type";
 "位置" = "Location";
 "请在设置-隐私里允许程序使用地理位置服务" = "Please allow applications to use geolocation services in Settings-Privacy";
 "请打开地理位置服务" = "Please turn on geolocation services";
@@ -281,13 +281,6 @@
 "[群信息更新]" = "[Group information update]";
 "[超大群信息更新]" = "[Super Group Information Update]";
 "[未知消息]" = "[Unknown message]";
-
-"[系统通知][%@]" = "[System Notication][%@]";
-"点对点消息撤回" = "Revoke P2P";
-"群消息撤回" = "Revoke team";
-"超大群消息撤回" = "Revoke superteam";
-"点对点消息单向撤回" = "Revoke P2P one-sided";
-"群消息单向撤回" = "Revoke team one-sided";
 
 "相册权限受限" = "Album permission restricted ";
 "检测不到相机设备" = " Cannot detect camera device";

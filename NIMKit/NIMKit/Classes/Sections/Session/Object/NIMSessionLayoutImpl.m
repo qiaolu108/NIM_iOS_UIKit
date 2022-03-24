@@ -74,8 +74,10 @@
     [self adjustTableView];
 }
 
-- (void)layoutAfterRefresh {
+- (void)layoutAfterRefresh
+{
     [self.refreshControl endRefreshing];
+    [self.tableView reloadData];
 }
 
 
@@ -141,10 +143,16 @@
     
     
     BOOL tableChanged = !CGRectEqualToRect(self.tableView.frame, rect);
+    if (fabs(self.tableView.frame.size.height - rect.size.height) == 1) {
+        rect.size.height -= 1;
+        tableChanged = YES;
+    }
     if (tableChanged)
     {
-        [self.tableView setFrame:rect];
-        [self.tableView nim_scrollToBottom:YES];
+        // 避免抖动问题
+        rect.size.height += 1;
+        [self.tableView setFrame: rect];
+        [self.tableView nim_scrollToBottom: NO];
     }
 }
 
