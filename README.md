@@ -1,5 +1,3 @@
-**#推荐好友使用云信，即享1500元京东卡奖励# 点击参与https://yunxin.163.com/promotion/recommend?channel=github**
-
 # 网易云信 UI 组件 	· iOS
 [![Build Status](https://img.shields.io/travis/netease-im/NIM_iOS_UIKit/master.svg?style=flat)](https://travis-ci.org/netease-im/NIM_iOS_UIKit)
 [![Pod Version](https://img.shields.io/cocoapods/v/NIMKit.svg?style=flat)](#)
